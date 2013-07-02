@@ -282,7 +282,7 @@
             if (this.options.availableTags || this.options.tagSource || this.options.autocomplete.source) {
                 var autocompleteOptions = {
                     select: function(event, ui) {
-                        that.createTag(ui.item.value);
+                        that.createTag(ui.item);
                         // Preventing the tag input to be updated with the chosen value.
                         return false;
                     }
@@ -354,7 +354,14 @@
                 return $(tag).find('input:first').val();
             }
         },
-
+        tagValue: function(tag) {
+             // Returns the tag's value
+            if (this.options.singleField) {
+                 return $(tag).children('.tagit-label').data('tag-value');
+            } else {
+                 return $(tag).children('input').val();
+            }
+        },
         _showAutocomplete: function() {
             this.tagInput.autocomplete('search', '');
         },
@@ -386,10 +393,10 @@
             return Boolean($.effects && ($.effects[name] || ($.effects.effect && $.effects.effect[name])));
         },
 
-        createTag: function(value, additionalClass, duringInitialization) {
+        createTag: function(item, additionalClass, duringInitialization) {
             var that = this;
-
-            value = $.trim(value);
+            label = item.label;
+            value = $.trim(item.value);
 
             if(this.options.preprocessTag) {
                 value = this.options.preprocessTag(value);
@@ -417,7 +424,7 @@
                 return false;
             }
 
-            var label = $(this.options.onTagClicked ? '<a class="tagit-label"></a>' : '<span class="tagit-label"></span>').text(value);
+            var label = $(this.options.onTagClicked ? '<a class="tagit-label"></a>' : '<span class="tagit-label"></span>').html(label).data('tag-value', value);
 
             // Create tag.
             var tag = $('<li></li>')
@@ -483,7 +490,6 @@
 
         removeTag: function(tag, animate) {
             animate = typeof animate === 'undefined' ? this.options.animate : animate;
-
             tag = $(tag);
 
             // DEPRECATED.
@@ -495,7 +501,7 @@
 
             if (this.options.singleField) {
                 var tags = this.assignedTags();
-                var removedTagLabel = this.tagLabel(tag);
+                var removedTagLabel = this.tagValue(tag);
                 tags = $.grep(tags, function(el){
                     return el != removedTagLabel;
                 });
@@ -538,4 +544,3 @@
 
     });
 })(jQuery);
-
