@@ -441,7 +441,6 @@
                     .addClass('ui-icon ui-icon-close');
                 var removeTag = $('<a><span class="text-icon">\xd7</span></a>') // \xd7 is an X
                     .addClass('tagit-close')
-                    .append(removeTagIcon)
                     .click(function(e) {
                         // Removes a tag when the little 'x' is clicked.
                         that.removeTag(tag);
@@ -491,7 +490,6 @@
         removeTag: function(tag, animate) {
             animate = typeof animate === 'undefined' ? this.options.animate : animate;
             tag = $(tag);
-
             // DEPRECATED.
             this._trigger('onTagRemoved', null, tag);
 
