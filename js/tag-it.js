@@ -395,9 +395,12 @@
 
         createTag: function(item, additionalClass, duringInitialization) {
             var that = this;
-            label = item.label;
-            value = $.trim(item.value);
-
+            if (item.label && item.value){
+                label = item.label;
+                value = $.trim(item.value);
+            }else{
+                label = value = item;
+            }
             if(this.options.preprocessTag) {
                 value = this.options.preprocessTag(value);
             }
